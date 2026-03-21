@@ -198,17 +198,18 @@ def main():
         print("2. Изменить баланс цели")
         print("3. Выйти")
         choice = input("Выберите действие (1–3): ").strip()
-        if choice == "1":
-            add_goal(goals)
-            save_goals(goals, filename)  # Сохраняем после каждого добавления
-        elif choice == "2":
-            change_balance(goals)
-            save_goals(goals, filename)
-        elif choice == "3":
-            print("До свидания!")
-            break
-        else:
-            print("Неверный выбор. Попробуйте снова.")
+        match choice:
+            case "1":
+                add_goal(goals)
+                save_goals(goals, filename)  # Сохраняем после каждого добавления
+            case "2":
+                change_balance(goals)
+                save_goals(goals, filename)
+            case "3":
+                print("До свидания!")
+                break
+            case _:
+                print("Неверный выбор. Попробуйте снова.")
 
 
 if __name__ == "__main__":

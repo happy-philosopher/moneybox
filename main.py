@@ -9,6 +9,7 @@ from datetime import datetime
 
 class Goal:
     """Класс, описывающий цель накопления."""
+
     def __init__(self, name, target_amount, category=None):
         """
         Инициализация цели.
@@ -116,6 +117,23 @@ def find_goal_by_name(goals, name):
     return None
 
 
+def display_goals_list(goals):
+    """Выводит список всех целей с номерами."""
+    if not goals:
+        print("Нет сохранённых целей.")
+        return False
+
+    print("\nСписок целей:")
+    print("-" * 60)
+    for i, goal in enumerate(goals, start=1):
+        print(f"{i}. {goal.name}")
+        print(f"   Сумма: {goal.current_balance:.2f} / {goal.target_amount:.2f} руб.")
+        print(f"   Категория: {goal.category}")
+        print(f"   Статус: {goal.status}")
+        print("-" * 60)
+    return True
+
+
 def add_goal(goals):
     """Добавляет новую цель."""
     print("\n--- Добавление новой цели ---")
@@ -149,21 +167,45 @@ def change_balance(goals):
     if not goals:
         print("Нет сохранённых целей. Сначала добавьте цель.")
         return
+
     print("\n--- Изменение баланса цели ---")
-    name = input("Введите название цели: ").strip()
-    goal = find_goal_by_name(goals, name)
-    if not goal:
-        print("Цель не найдена.")
+
+    # Выводим все цели с номерами
+    if not display_goals_list(goals):
         return
-    print(f"Баланс: {goal.current_balance:.2f}/{goal.target_amount:.2f} руб. Статус: {goal.status}")
+
+    # Выбираем цель по номеру
     while True:
-        action = input("Действие (1 — пополнить, 2 — снять, 0 — отмена): ").strip()
+        try:
+            choice = input("\nВыберите номер цели (0 — отмена): ").strip()
+            if choice == "0":
+                print("Действие отменено.")
+                return
+
+            index = int(choice) - 1
+            if 0 <= index < len(goals):
+                goal = goals[index]
+                break
+            else:
+                print(f"Ошибка: введите число от 1 до {len(goals)} или 0 для отмены.")
+        except ValueError:
+            print("Ошибка: введите корректное число.")
+
+    # Показываем информацию о выбранной цели
+    print(f"\nВыбрана цель: {goal.name}")
+    print(f"Баланс: {goal.current_balance:.2f}/{goal.target_amount:.2f} руб. Статус: {goal.status}")
+
+    # Выбираем действие
+    while True:
+        action = input("\nДействие (1 — пополнить, 2 — снять, 0 — отмена): ").strip()
         if action == "0":
             print("Действие отменено.")
             return
         if action in ("1", "2"):
             break
         print("Введите 1, 2 или 0.")
+
+    # Вводим сумму
     while True:
         try:
             amount = float(input("Сумма (руб.): "))
@@ -173,17 +215,19 @@ def change_balance(goals):
             break
         except ValueError:
             print("Введите число.")
+
+    # Выполняем операцию
     try:
         if action == "1":
             goal.add_funds(amount)
-            print(f"Пополнено на {amount:.2f} руб. Новый баланс: {goal.current_balance:.2f} руб.")
+            print(f"\nПополнено на {amount:.2f} руб. Новый баланс: {goal.current_balance:.2f} руб.")
             if goal.status == "Достигнута":
-                print("Цель достигнута!")
+                print("Поздравляем! Цель достигнута!")
         else:
             goal.withdraw_funds(amount)
-            print(f"Снято {amount:.2f} руб. Новый баланс: {goal.current_balance:.2f} руб.")
+            print(f"\nСнято {amount:.2f} руб. Новый баланс: {goal.current_balance:.2f} руб.")
     except ValueError as e:
-        print(f"Ошибка: {e}")
+        print(f"\nОшибка: {e}")
 
 
 def main():

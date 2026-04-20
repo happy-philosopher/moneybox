@@ -2,6 +2,7 @@
 venv/
 .venv/
 img/
+__pycache__/
 test*.py
 test*.txt
 main_*.py

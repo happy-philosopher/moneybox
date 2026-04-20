@@ -1,0 +1,31 @@
+moneybox/
+│
+├── main.py                 # Точка входа, основной цикл
+│
+├── models/
+│   ├── __init__.py
+│   └── goal.py             # Класс Goal и его методы
+│
+├── storage/
+│   ├── __init__.py
+│   └── file_storage.py     # load_goals, save_goals
+│
+├── ui/
+│   ├── __init__.py
+│   ├── display.py          # display_goals_list, show_progress_bar
+│   └── input_handlers.py   # select_goal, get_positive_float, get_deadline_if_valid
+│
+├── handlers/
+│   ├── __init__.py
+│   ├── goal_handlers.py    # add_goal, remove_goal, change_balance
+│   ├── view_handlers.py    # show_goal_details, show_total_progress
+│   └── filter_handlers.py  # filter_goals_by_category, configure_notifications, set_notification_percentages
+│
+├── utils/
+│   ├── __init__.py
+│   ├── constants.py        # Класс AppConfig
+│   └── decorators.py       # handle_input_errors
+│
+└── tests/                  # (опционально)
+    ├── test_goal.py
+    └── test_storage.py
